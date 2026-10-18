@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jemma Parambu Family</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f1e7; --paper: #fffdf8; --ink: #2b2620; --muted: #7a6f60;
+    --line: #d6c9b2; --accent: #8a5a2b; --accent-soft: #f1e4d0;
+    --g1: #8a5a2b; --g2: #3f6b5a; --g3: #5a5f8a; --g4: #9a5470; --g5: #6b7a2f;
+    --hit: #fff1b8; --overlay: rgba(30,20,10,.35);
+    --shadow: 0 1px 2px rgba(60,40,20,.06), 0 6px 20px rgba(60,40,20,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1b1814; --paper: #24201b; --ink: #ede5d8; --muted: #a89c8a;
+      --line: #463d32; --accent: #d9a66b; --accent-soft: #3a2f22;
+      --g1: #d9a66b; --g2: #7fbfa5; --g3: #a3a8de; --g4: #e09bb7; --g5: #bccb7a;
+      --hit: #5a4a14; --overlay: rgba(0,0,0,.55); --shadow: none;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1b1814; --paper: #24201b; --ink: #ede5d8; --muted: #a89c8a;
+    --line: #463d32; --accent: #d9a66b; --accent-soft: #3a2f22;
+    --g1: #d9a66b; --g2: #7fbfa5; --g3: #a3a8de; --g4: #e09bb7; --g5: #bccb7a;
+    --hit: #5a4a14; --overlay: rgba(0,0,0,.55); --shadow: none;
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 Inter, system-ui, sans-serif; }
+  button { font: inherit; color: inherit; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px 64px; }
+
+  header { text-align: center; padding: 48px 0 20px; }
+  .eyebrow { letter-spacing: .2em; text-transform: uppercase; font-size: 12px; color: var(--muted); }
+  h1 { font-family: "Cormorant Garamond", serif; font-weight: 600; font-size: clamp(38px, 7vw, 64px); line-height: 1.05; margin: 8px 0 6px; }
+  .ornament { color: var(--accent); letter-spacing: .5em; }
+  .stats { display: flex; justify-content: center; gap: 26px; flex-wrap: wrap; margin-top: 16px; color: var(--muted); font-size: 13px; }
+  .stats b { display: block; font-family: "Cormorant Garamond", serif; font-size: 28px; color: var(--ink); font-weight: 600; }
+
+  /* toolbar */
+  .toolbar { position: sticky; top: 0; z-index: 20; background: var(--bg); padding: 12px 0; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: center; border-bottom: 1px solid var(--line); margin-bottom: 24px; }
+  .tabs { display: inline-flex; background: var(--paper); border: 1px solid var(--line); border-radius: 999px; padding: 3px; flex-wrap: wrap; }
+  .tabs button { border: 0; background: none; padding: 7px 14px; border-radius: 999px; cursor: pointer; color: var(--muted); }
+  .tabs button.on { background: var(--accent); color: var(--paper); }
+  .pill { padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--paper); cursor: pointer; }
+  .pill:hover { border-color: var(--accent); }
+  .searchbox { position: relative; }
+  .searchbox input { width: 220px; max-width: 70vw; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); font: inherit; }
+  .results { position: absolute; top: 110%; left: 0; right: 0; min-width: 240px; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); max-height: 320px; overflow: auto; z-index: 30; }
+  .results button { display: flex; gap: 10px; align-items: center; width: 100%; text-align: left; border: 0; background: none; padding: 8px 12px; cursor: pointer; }
+  .results button:hover { background: var(--accent-soft); }
+  .results small { color: var(--muted); display: block; }
+
+  /* avatar */
+  .av { width: 36px; height: 36px; border-radius: 50%; flex: none; display: inline-grid; place-items: center; font-size: 13px; font-weight: 600; color: var(--paper); background: var(--muted); object-fit: cover; }
+  .av.lg { width: 112px; height: 112px; font-size: 36px; font-family: "Cormorant Garamond", serif; }
+  .name-unknown { font-style: italic; color: var(--muted); font-weight: 400 !important; }
+  .me-tag { color: var(--accent); font-size: 11px; font-weight: 500; }
+  .link { cursor: pointer; }
+  .link:hover .nm, .link:hover { text-decoration: underline; text-decoration-color: var(--accent); }
+
+  /* ── TREE VIEW ── */
+  .tree-controls { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 12px; align-items: center; color: var(--muted); font-size: 13px; }
+  .tree-controls select { padding: 7px 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); font: inherit; }
+  .canvas { overflow: auto; background: var(--paper); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); height: 70vh; cursor: grab; }
+  .canvas { scrollbar-width: none; }
+  .canvas::-webkit-scrollbar { display: none; }
+  .canvas.drag { cursor: grabbing; user-select: none; }
+  .org { padding: 32px; width: max-content; min-width: 100%; }
+  .org ul { padding-top: 22px; position: relative; display: flex; justify-content: center; margin: 0; padding-left: 0; }
+  .org > ul { padding-top: 0; }
+  .org li { list-style: none; position: relative; padding: 22px 6px 0; text-align: center; display: flex; flex-direction: column; align-items: center; }
+  .org > ul > li { padding-top: 0; }
+  .org li::before, .org li::after { content: ""; position: absolute; top: 0; right: 50%; width: 50%; height: 22px; border-top: 1.5px solid var(--line); }
+  .org li::after { right: auto; left: 50%; border-left: 1.5px solid var(--line); }
+  .org li:only-child::before, .org li:only-child::after { display: none; }
+  .org li:only-child { padding-top: 0; }
+  .org li:first-child::before, .org li:last-child::after { border: 0; }
+  .org li:last-child::before { border-right: 1.5px solid var(--line); border-radius: 0 8px 0 0; }
+  .org li:first-child::after { border-radius: 8px 0 0 0; }
+  .org ul ul::before { content: ""; position: absolute; top: 0; left: 50%; height: 22px; border-left: 1.5px solid var(--line); }
+  .node { background: var(--bg); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px 8px; min-width: 112px; max-width: 170px; position: relative; border-top: 3px solid var(--gc, var(--line)); }
+  .node .who { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .node .nm { font-weight: 600; font-size: 13.5px; line-height: 1.25; }
+  .node .sp { margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--line); font-size: 12.5px; color: var(--muted); display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .node .sp .av { width: 22px; height: 22px; font-size: 10px; }
+  .node.me { background: var(--accent-soft); }
+  .node.hit { background: var(--hit); }
+  .toggle { position: absolute; bottom: -11px; left: 50%; transform: translateX(-50%); width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--line); background: var(--paper); cursor: pointer; font-size: 13px; line-height: 1; padding: 0; z-index: 2; }
+  .toggle .ct { font-size: 10px; }
+
+  /* ── BRANCH VIEW ── */
+  .roots { background: var(--paper); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); text-align: center; padding: 24px 16px; margin: 0 auto; max-width: 520px; }
+  .roots .label { font-size: 12px; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); }
+  .roots .couple { font-family: "Cormorant Garamond", serif; font-size: 30px; font-weight: 600; }
+  .amp { color: var(--accent); font-style: italic; padding: 0 6px; }
+  .trunk { width: 1px; height: 28px; background: var(--line); margin: 0 auto; }
+  .branches { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px; }
+  .branch { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 18px 18px 12px; border-top: 4px solid var(--g2); }
+  .branch h2 { font-family: "Cormorant Garamond", serif; font-weight: 600; font-size: 24px; margin: 0; }
+  .branch .sub { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
+  .btree, .btree ul { list-style: none; margin: 0; padding: 0; }
+  .btree ul { margin-left: 10px; padding-left: 16px; border-left: 1px solid var(--line); }
+  .btree li { position: relative; padding: 2px 0; }
+  .btree ul > li::before { content: ""; position: absolute; left: -16px; top: 16px; width: 12px; border-top: 1px solid var(--line); }
+  .btree summary { list-style: none; cursor: pointer; }
+  .btree summary::-webkit-details-marker { display: none; }
+  .btree summary::after { content: " ▾"; color: var(--muted); font-size: 11px; }
+  .btree details:not([open]) > summary::after { content: " ▸"; }
+  .row { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; padding: 2px 8px; border-radius: 8px; }
+  .row .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gc); }
+  .row .nm { font-weight: 600; }
+  .row .spn { color: var(--muted); }
+  .row.me { background: var(--accent-soft); }
+  .row.hit { background: var(--hit); }
+
+  /* ── GENERATIONS VIEW ── */
+  .gen { margin-bottom: 28px; }
+  .gen h3 { font-family: "Cormorant Garamond", serif; font-size: 24px; font-weight: 600; margin: 0 0 10px; display: flex; gap: 10px; align-items: baseline; }
+  .gen h3 span { font: 13px Inter, sans-serif; color: var(--muted); }
+  .gen .chips { display: flex; flex-wrap: wrap; gap: 10px; padding-left: 14px; border-left: 3px solid var(--gc); }
+  .chip { display: inline-flex; align-items: center; gap: 10px; background: var(--paper); border: 1px solid var(--line); border-radius: 999px; padding: 5px 14px 5px 5px; cursor: pointer; }
+  .chip:hover { border-color: var(--accent); }
+  .chip small { display: block; color: var(--muted); font-size: 12px; line-height: 1.2; }
+  .chip .nm { font-weight: 600; line-height: 1.2; }
+  .chip.me { background: var(--accent-soft); }
+
+  /* ── PEOPLE VIEW ── */
+  .people-controls { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 16px; }
+  .people { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+  .card { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 18px 14px; text-align: center; cursor: pointer; box-shadow: var(--shadow); }
+  .card:hover { border-color: var(--accent); }
+  .card .av { width: 72px; height: 72px; font-size: 24px; margin-bottom: 8px; }
+  .card .nm { font-weight: 600; }
+  .card small { display: block; color: var(--muted); font-size: 12.5px; margin-top: 2px; }
+  .card.me { background: var(--accent-soft); }
+
+  /* ── PROFILE PANEL ── */
+  .scrim { position: fixed; inset: 0; background: var(--overlay); z-index: 40; }
+  .panel { position: fixed; top: 0; right: 0; height: 100%; width: min(420px, 100%); background: var(--paper); z-index: 50; overflow: auto; box-shadow: -10px 0 40px rgba(0,0,0,.15); padding: 24px 22px 40px; }
+  .panel .close { position: absolute; top: 14px; right: 14px; border: 1px solid var(--line); background: var(--bg); border-radius: 50%; width: 34px; height: 34px; cursor: pointer; font-size: 16px; }
+  .panel .head { text-align: center; padding-top: 10px; }
+  .panel h2 { font-family: "Cormorant Garamond", serif; font-size: 32px; font-weight: 600; margin: 12px 0 2px; line-height: 1.1; }
+  .panel .nick { color: var(--muted); }
+  .panel .gen-badge { display: inline-block; margin-top: 8px; font-size: 12px; padding: 3px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+  .panel h4 { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 26px 0 8px; font-weight: 600; }
+  .facts { display: grid; grid-template-columns: 90px 1fr; gap: 6px 12px; font-size: 14px; }
+  .facts dt { color: var(--muted); }
+  .facts dd { margin: 0; }
+  .about { font-family: "Cormorant Garamond", serif; font-size: 19px; line-height: 1.45; white-space: pre-line; }
+  .empty-note { color: var(--muted); font-size: 13.5px; font-style: italic; }
+  .rel { display: flex; flex-wrap: wrap; gap: 8px; }
+  .rel .chip { padding-right: 12px; }
+  .rel .chip .av { width: 28px; height: 28px; font-size: 11px; }
+  .panel .actions { margin-top: 26px; display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .legend { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; color: var(--muted); font-size: 13px; margin: 22px 0 0; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  footer { text-align: center; color: var(--muted); font-size: 13px; margin-top: 48px; }
+  .hidden { display: none !important; }
+
+  @media (max-width: 600px) {
+    .canvas { height: 65vh; }
+    .branches { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Family Tree</div>
+    <h1>Jemma Parambu</h1>
+    <div class="ornament">✦ ✦ ✦</div>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <div class="toolbar">
+    <div class="tabs" id="tabs">
+      <button data-view="tree">Tree</button>
+      <button data-view="branches">Branches</button>
+      <button data-view="generations">Generations</button>
+      <button data-view="people">People</button>
+    </div>
+    <div class="searchbox">
+      <input id="search" type="search" placeholder="Find a person…" aria-label="Find a person" autocomplete="off">
+      <div class="results hidden" id="results"></div>
+    </div>
+    <button class="pill" id="theme" type="button" title="Switch light / dark">◐</button>
+  </div>
+
+  <main id="view"></main>
+
+  <footer>A living record, kept for the generations to come.</footer>
+</div>
+
+<div class="scrim hidden" id="scrim"></div>
+<aside class="panel hidden" id="panel" aria-label="Person details"></aside>
+
+<script src="data.js"></script>
+<script>
+/* ───────── model ───────── */
+const byId = {};
+PEOPLE.forEach(p => byId[p.id] = p);
+const kids = {};                 // parent id -> [child ids] (in file order)
+const partnerOf = {};            // married-in id -> family member id
+PEOPLE.forEach(p => {
+  if (p.parent) (kids[p.parent] ||= []).push(p.id);
+  if (p.spouse) partnerOf[p.spouse] = p.id;
+});
+const childrenOf = id => kids[id] || kids[partnerOf[id]] || [];
+const spouseOf = id => byId[id].spouse ? byId[id].spouse : partnerOf[id];
+const parentsOf = id => {
+  const p = byId[id].parent;
+  if (!p) return [];
+  return [p, spouseOf(p)].filter(Boolean);
+};
+const siblingsOf = id => { const p = byId[id].parent; return p ? kids[p].filter(x => x !== id) : []; };
+
+function depth(id) {                     // 0 = topmost ancestor
+  const p = byId[id];
+  if (p.marriedIn) return partnerOf[id] ? depth(partnerOf[id]) : 0;
+  return p.parent ? depth(p.parent) + 1 : 0;
+}
+const GEN_NAMES = ["", "Children", "Grandchildren", "Great-grandchildren", "Great-great-grandchildren"];
+function genLabel(id, root = ROOT) {
+  const d = depth(id) - depth(root);
+  if (d === 0) return "Generation 1";
+  if (d > 0) return GEN_NAMES[d] || `Generation ${d + 1}`;
+  return d === -1 ? "Parents' generation" : "Earlier generation";
+}
+const genColor = d => ["var(--g1)", "var(--g2)", "var(--g3)", "var(--g4)", "var(--g5)"][((d % 5) + 5) % 5];
+
+/* ───────── helpers ───────── */
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const displayName = p => p.name || p.nickname || "";
+function nameHTML(id) {
+  const p = byId[id];
+  const n = displayName(p);
+  return n ? `<span class="nm">${esc(n)}</span>${p.me ? ' <span class="me-tag">· you</span>' : ""}`
+           : `<span class="nm name-unknown">Name to be added</span>`;
+}
+function avatar(id, cls = "") {
+  const p = byId[id];
+  if (p.photo) return `<img class="av ${cls}" src="${esc(p.photo)}" alt="">`;
+  const n = displayName(p);
+  const init = n ? n.replace(/^(J [A-Z] |J\.?[A-Z]\.? )/, "").split(/\s+/).map(w => w[0]).slice(0, 2).join("").toUpperCase() : "?";
+  return `<span class="av ${cls}" style="background:${genColor(depth(id))}">${esc(init)}</span>`;
+}
+const relLine = id => {
+  const p = byId[id];
+  if (p.marriedIn && partnerOf[id]) return `Married to ${displayName(byId[partnerOf[id]])}`;
+  if (p.parent) return `Child of ${displayName(byId[p.parent]) || "—"}`;
+  return genLabel(id);
+};
+const familyMembers = () => PEOPLE.filter(p => !p.marriedIn);
+
+/* ───────── state ───────── */
+let state = { view: "tree", root: ROOT, collapsed: new Set(), zoom: 1, highlight: null };
+try { const v = localStorage.getItem("ft-view"); if (v) state.view = v; } catch (e) {}
+
+/* ───────── stats ───────── */
+function renderStats() {
+  const counts = {};
+  familyMembers().forEach(p => { const d = depth(p.id) - depth(ROOT); if (d > 0) counts[d] = (counts[d] || 0) + 1; });
+  const total = PEOPLE.length;
+  document.getElementById("stats").innerHTML =
+    Object.keys(counts).sort((a, b) => a - b).map(d => `<div><b>${counts[d]}</b>${GEN_NAMES[d] || "Generation " + (+d + 1)}</div>`).join("") +
+    `<div><b>${total}</b>People in all</div>`;
+}
+
+/* ───────── TREE VIEW ───────── */
+function treeNode(id) {
+  const p = byId[id], sp = spouseOf(id), ch = childrenOf(id), d = depth(id);
+  const closed = state.collapsed.has(id);
+  const cls = ["node", p.me ? "me" : "", state.highlight === id ? "hit" : ""].join(" ");
+  return `<li>
+    <div class="${cls}" style="--gc:${genColor(d)}" data-id="${id}">
+      <div class="who link" data-open="${id}">${avatar(id)}${nameHTML(id)}</div>
+      ${sp ? `<div class="sp link" data-open="${sp}">${avatar(sp)}<span>${esc(displayName(byId[sp]) || "—")}</span></div>` : ""}
+      ${ch.length ? `<button class="toggle" data-toggle="${id}" title="${closed ? "Show" : "Hide"} children">${closed ? `<span class="ct">${ch.length}</span>` : "−"}</button>` : ""}
+    </div>
+    ${ch.length && !closed ? `<ul>${ch.map(treeNode).join("")}</ul>` : ""}
+  </li>`;
+}
+function renderTree() {
+  const opts = familyMembers().filter(p => childrenOf(p.id).length)
+    .map(p => `<option value="${p.id}" ${p.id === state.root ? "selected" : ""}>${esc(displayName(p) || p.id)}</option>`).join("");
+  return `
+    <div class="tree-controls">
+      <label>Start from <select id="rootSel">${opts}</select></label>
+      <button class="pill" data-act="expand">Expand all</button>
+      <button class="pill" data-act="collapse">Collapse to children</button>
+      <button class="pill" data-act="zout">−</button>
+      <button class="pill" data-act="zin">+</button>
+      <button class="pill" data-act="zreset">Reset</button>
+    </div>
+    <div class="canvas" id="canvas"><div class="org" id="org" style="zoom:${state.zoom}"><ul>${treeNode(state.root)}</ul></div></div>
+    <div class="legend">
+      <span><i style="background:var(--g1)"></i>Generation 1</span><span><i style="background:var(--g2)"></i>Children</span>
+      <span><i style="background:var(--g3)"></i>Grandchildren</span><span><i style="background:var(--g4)"></i>Great-grandchildren</span>
+      <span>Drag to move · click a name for details</span>
+    </div>`;
+}
+let drag = null;
+addEventListener("pointermove", e => { if (!drag) return; drag.c.scrollLeft = drag.l - (e.clientX - drag.x); drag.c.scrollTop = drag.t - (e.clientY - drag.y); });
+addEventListener("pointerup", () => { if (drag) drag.c.classList.remove("drag"); drag = null; });
+function afterTree() {
+  const c = document.getElementById("canvas");
+  c.scrollLeft = (c.scrollWidth - c.clientWidth) / 2;
+  c.addEventListener("pointerdown", e => { if (e.target.closest("button,.link")) return; drag = { c, x: e.clientX, y: e.clientY, l: c.scrollLeft, t: c.scrollTop }; c.classList.add("drag"); });
+  document.getElementById("rootSel").onchange = e => { state.root = e.target.value; state.collapsed.clear(); render(); };
+}
+
+/* ───────── BRANCH VIEW ───────── */
+function branchItem(id) {
+  const p = byId[id], sp = spouseOf(id), ch = childrenOf(id);
+  const row = `<span class="row ${p.me ? "me" : ""} ${state.highlight === id ? "hit" : ""}" style="--gc:${genColor(depth(id))}"><span class="dot"></span><span class="link" data-open="${id}">${nameHTML(id)}</span>${sp ? `<span class="spn"><span class="amp">&amp;</span><span class="link" data-open="${sp}">${esc(displayName(byId[sp]) || "—")}</span></span>` : ""}</span>`;
+  if (!ch.length) return `<li>${row}</li>`;
+  return `<li><details open><summary>${row}</summary><ul>${ch.map(branchItem).join("")}</ul></details></li>`;
+}
+function renderBranches() {
+  const r = state.root, sp = spouseOf(r);
+  return `
+    <section class="roots">
+      <div class="label">The beginning</div>
+      <div class="couple"><span class="link" data-open="${r}">${esc(displayName(byId[r]))}</span>${sp ? `<span class="amp">&amp;</span><span class="link" data-open="${sp}">${esc(displayName(byId[sp]))}</span>` : ""}</div>
+    </section>
+    <div class="trunk"></div>
+    <section class="branches">
+      ${childrenOf(r).map((c, i) => {
+        const csp = spouseOf(c);
+        return `<article class="branch">
+          <h2 class="link" data-open="${c}">${esc(displayName(byId[c]) || "Name to be added")}</h2>
+          <div class="sub">${csp ? `&amp; <span class="link" data-open="${csp}">${esc(displayName(byId[csp]))}</span> · ` : ""}Branch ${i + 1}</div>
+          <ul class="btree">${childrenOf(c).map(branchItem).join("")}</ul>
+        </article>`;
+      }).join("")}
+    </section>`;
+}
+
+/* ───────── GENERATIONS VIEW ───────── */
+function renderGenerations() {
+  const levels = {};
+  familyMembers().forEach(p => (levels[depth(p.id)] ||= []).push(p.id));
+  return Object.keys(levels).sort((a, b) => a - b).map(d => {
+    const ids = levels[d];
+    const label = +d === depth(ROOT) ? "Generation 1" : genLabel(ids[0]);
+    return `<section class="gen" style="--gc:${genColor(+d)}">
+      <h3>${label}<span>${ids.length} ${ids.length === 1 ? "person" : "people"}</span></h3>
+      <div class="chips">${ids.map(id => {
+        const sp = spouseOf(id);
+        return `<div class="chip ${byId[id].me ? "me" : ""}" data-open="${id}">${avatar(id)}<div>${nameHTML(id)}${sp ? `<small>&amp; ${esc(displayName(byId[sp]))}</small>` : `<small>${esc(relLine(id))}</small>`}</div></div>`;
+      }).join("")}</div>
+    </section>`;
+  }).join("");
+}
+
+/* ───────── PEOPLE VIEW ───────── */
+let peopleFilter = "all";
+function renderPeople() {
+  let list = [...PEOPLE];
+  if (peopleFilter === "family") list = list.filter(p => !p.marriedIn);
+  if (peopleFilter === "married") list = list.filter(p => p.marriedIn);
+  list.sort((a, b) => !displayName(a) - !displayName(b) || displayName(a).localeCompare(displayName(b)));
+  const btn = (k, t) => `<button class="pill" data-filter="${k}" style="${peopleFilter === k ? "border-color:var(--accent);color:var(--accent)" : ""}">${t}</button>`;
+  return `
+    <div class="people-controls">${btn("all", "Everyone")}${btn("family", "Born into the family")}${btn("married", "Married in")}</div>
+    <div class="people">${list.map(p => `
+      <div class="card ${p.me ? "me" : ""}" data-open="${p.id}">
+        ${avatar(p.id)}
+        <div>${nameHTML(p.id)}</div>
+        <small>${esc(relLine(p.id))}</small>
+        ${p.work ? `<small>${esc(p.work)}</small>` : ""}
+      </div>`).join("")}</div>`;
+}
+
+/* ───────── PROFILE PANEL ───────── */
+function chipList(ids) {
+  if (!ids.length) return `<div class="empty-note">None recorded</div>`;
+  return `<div class="rel">${ids.map(id => `<div class="chip" data-open="${id}">${avatar(id)}<div>${nameHTML(id)}</div></div>`).join("")}</div>`;
+}
+function openPerson(id) {
+  const p = byId[id];
+  const facts = [["Born", p.born], ["Passed away", p.died], ["Place", p.place], ["School", p.school], ["Work", p.work]].filter(f => f[1]);
+  const sp = spouseOf(id);
+  const panel = document.getElementById("panel");
+  panel.innerHTML = `
+    <button class="close" data-close aria-label="Close">✕</button>
+    <div class="head">
+      ${avatar(id, "lg")}
+      <h2>${displayName(p) ? esc(displayName(p)) : '<span class="name-unknown">Name to be added</span>'}</h2>
+      ${p.nickname && p.name ? `<div class="nick">“${esc(p.nickname)}”</div>` : ""}
+      <div class="gen-badge">${p.marriedIn ? "Married into the family" : genLabel(id)}</div>
+    </div>
+    <h4>About</h4>
+    ${facts.length ? `<dl class="facts">${facts.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")}</dl>` : ""}
+    ${p.about ? `<p class="about">${esc(p.about)}</p>` : ""}
+    ${!facts.length && !p.about ? `<div class="empty-note">No details yet. Add school, work, or a few words to remember them by in data.js.</div>` : ""}
+    <h4>${p.marriedIn ? "Spouse" : "Husband / Wife"}</h4>${chipList(sp ? [sp] : [])}
+    ${p.marriedIn ? "" : `<h4>Parents</h4>${chipList(parentsOf(id))}<h4>Brothers &amp; sisters</h4>${chipList(siblingsOf(id))}`}
+    <h4>Children</h4>${chipList(childrenOf(id))}
+    <div class="actions">
+      <button class="pill" data-show="${p.marriedIn ? partnerOf[id] || id : id}">Show in tree</button>
+    </div>`;
+  panel.classList.remove("hidden");
+  document.getElementById("scrim").classList.remove("hidden");
+  panel.scrollTop = 0;
+}
+function closePanel() {
+  document.getElementById("panel").classList.add("hidden");
+  document.getElementById("scrim").classList.add("hidden");
+}
+function showInTree(id) {
+  // expand everything on the path from the root to this person
+  let cur = byId[id];
+  while (cur && cur.parent) { state.collapsed.delete(cur.parent); cur = byId[cur.parent]; }
+  let top = id; while (byId[top].parent) top = byId[top].parent;
+  if (!isDescendant(id, state.root)) state.root = top;
+  state.highlight = id; state.view = "tree";
+  closePanel(); render();
+  const el = document.querySelector(`.node[data-id="${id}"]`);
+  if (el) el.scrollIntoView({ block: "center", inline: "center", behavior: "smooth" });
+}
+function isDescendant(id, ancestor) {
+  for (let c = id; c; c = byId[c].parent) if (c === ancestor) return true;
+  return false;
+}
+
+/* ───────── render + events ───────── */
+function render() {
+  document.querySelectorAll("#tabs button").forEach(b => b.classList.toggle("on", b.dataset.view === state.view));
+  const v = document.getElementById("view");
+  v.innerHTML = { tree: renderTree, branches: renderBranches, generations: renderGenerations, people: renderPeople }[state.view]();
+  if (state.view === "tree") afterTree();
+  try { localStorage.setItem("ft-view", state.view); } catch (e) {}
+}
+
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-view],[data-open],[data-toggle],[data-act],[data-filter],[data-close],[data-show],[data-result]");
+  if (!t) { if (!e.target.closest(".searchbox")) document.getElementById("results").classList.add("hidden"); return; }
+  if (t.dataset.view) { state.view = t.dataset.view; state.highlight = null; render(); }
+  else if (t.dataset.open) { if (t.tagName === "SUMMARY" || t.closest("summary")) e.preventDefault(); openPerson(t.dataset.open); }
+  else if (t.dataset.toggle) { const id = t.dataset.toggle; state.collapsed.has(id) ? state.collapsed.delete(id) : state.collapsed.add(id); render(); }
+  else if (t.dataset.act) {
+    const a = t.dataset.act;
+    if (a === "expand") state.collapsed.clear();
+    if (a === "collapse") { state.collapsed.clear(); childrenOf(state.root).forEach(c => childrenOf(c).length && state.collapsed.add(c)); }
+    if (a === "zin") state.zoom = Math.min(1.6, +(state.zoom + .1).toFixed(2));
+    if (a === "zout") state.zoom = Math.max(.4, +(state.zoom - .1).toFixed(2));
+    if (a === "zreset") { state.zoom = 1; state.root = ROOT; state.collapsed.clear(); state.highlight = null; }
+    render();
+  }
+  else if (t.dataset.filter) { peopleFilter = t.dataset.filter; render(); }
+  else if (t.dataset.close !== undefined) closePanel();
+  else if (t.dataset.show) showInTree(t.dataset.show);
+  else if (t.dataset.result) {
+    document.getElementById("results").classList.add("hidden");
+    document.getElementById("search").value = "";
+    openPerson(t.dataset.result);
+  }
+});
+document.getElementById("scrim").onclick = closePanel;
+addEventListener("keydown", e => { if (e.key === "Escape") closePanel(); });
+
+document.getElementById("search").addEventListener("input", e => {
+  const q = e.target.value.trim().toLowerCase();
+  const box = document.getElementById("results");
+  if (!q) { box.classList.add("hidden"); return; }
+  const hits = PEOPLE.filter(p => [p.name, p.nickname, p.school, p.work, p.place].some(v => v && v.toLowerCase().includes(q))).slice(0, 12);
+  box.innerHTML = hits.length
+    ? hits.map(p => `<button data-result="${p.id}">${avatar(p.id)}<span>${nameHTML(p.id)}<small>${esc(relLine(p.id))}</small></span></button>`).join("")
+    : `<div class="empty-note" style="padding:10px 12px">No one found</div>`;
+  box.classList.remove("hidden");
+});
+
+document.getElementById("theme").onclick = () => {
+  const r = document.documentElement;
+  const dark = r.dataset.theme ? r.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  r.dataset.theme = dark ? "light" : "dark";
+  try { localStorage.setItem("ft-theme", r.dataset.theme); } catch (e) {}
+};
+try { const th = localStorage.getItem("ft-theme"); if (th) document.documentElement.dataset.theme = th; } catch (e) {}
+
+renderStats();
+render();
+</script>
+</body>
+</html>
