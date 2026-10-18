@@ -10,7 +10,11 @@
   spouse    id of their husband/wife
   marriedIn true for people who married into the family
   photo     e.g. "photos/naeem.jpg"  (put the image in the photos folder)
-  born, died, place, school, work, about   anything you want to remember
+  born      year only for living people, e.g. "1998"; full date for those who have passed
+  died      date they passed away
+  livedIn   hometown / house name, e.g. "House name, Town"
+  knownFor  main thing they did in life (elders), e.g. "Rice merchant, Bazaar Road"
+  memory    one plain line the family remembers them by (those who have passed)
 
   To add J A Hamza's father later: add him as a new person,
   then give J A Hamza  parent: "<his id>".
@@ -32,7 +36,7 @@ const PEOPLE = [
   { id: "navas", name: "J H Navas", parent: "hamza", spouse: "shafeena" },
 
   { id: "zainaba", name: "Zainaba", marriedIn: true },
-  { id: "gafoor", name: "Gafoor", marriedIn: true },
+  { id: "gafoor", name: "Abdul Gafoor", marriedIn: true },
   { id: "zareena", name: "Zareena", marriedIn: true },
   { id: "ashraf", name: "Ashraf", marriedIn: true },
   { id: "shafeena", name: "Shafeena", marriedIn: true },
@@ -47,7 +51,7 @@ const PEOPLE = [
   { id: "naira", name: "Naira", parent: "niyas" },
   { id: "farah", name: "Farah", parent: "thachi" },
   { id: "farhan", name: "Farhan", parent: "thachi" },
-  { id: "thachi_3", name: "", parent: "thachi" },
+  { id: "thachi_3", name: "Nourin", parent: "thachi" },
   { id: "amal", name: "Amal", parent: "thachi" },
   { id: "ishal", name: "Ishal", parent: "nizad" },
 

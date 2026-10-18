@@ -484,7 +484,7 @@ function renderPeople() {
         ${avatar(p.id)}
         <div>${nameHTML(p.id)}</div>
         <small>${esc(relLine(p.id))}</small>
-        ${p.work ? `<small>${esc(p.work)}</small>` : ""}
+        ${p.knownFor ? `<small>${esc(p.knownFor)}</small>` : ""}
       </div>`).join("")}</div>`;
 }
 
@@ -495,7 +495,7 @@ function chipList(ids) {
 }
 function openPerson(id) {
   const p = byId[id];
-  const facts = [["Born", p.born], ["Passed away", p.died], ["Place", p.place], ["School", p.school], ["Work", p.work]].filter(f => f[1]);
+  const facts = [["Born", p.born], ["Passed away", p.died], ["Lived in", p.livedIn], ["Known for", p.knownFor]].filter(f => f[1]);
   const sp = spouseOf(id);
   const panel = document.getElementById("panel");
   panel.innerHTML = `
@@ -508,8 +508,8 @@ function openPerson(id) {
     </div>
     <h4>About</h4>
     ${facts.length ? `<dl class="facts">${facts.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")}</dl>` : ""}
-    ${p.about ? `<p class="about">${esc(p.about)}</p>` : ""}
-    ${!facts.length && !p.about ? `<div class="empty-note">No details yet. Add school, work, or a few words to remember them by in data.js.</div>` : ""}
+    ${p.memory ? `<h4>Remembered for</h4><p class="about">${esc(p.memory)}</p>` : ""}
+    ${!facts.length && !p.memory ? `<div class="empty-note">No details added yet.</div>` : ""}
     <h4>${p.marriedIn ? "Spouse" : "Husband / Wife"}</h4>${chipList(sp ? [sp] : [])}
     ${p.marriedIn ? "" : `<h4>Parents</h4>${chipList(parentsOf(id))}<h4>Brothers &amp; sisters</h4>${chipList(siblingsOf(id))}`}
     <h4>Children</h4>${chipList(childrenOf(id))}
@@ -583,7 +583,7 @@ document.getElementById("search").addEventListener("input", e => {
   const q = e.target.value.trim().toLowerCase();
   const box = document.getElementById("results");
   if (!q) { box.classList.add("hidden"); return; }
-  const hits = PEOPLE.filter(p => [p.name, p.nickname, p.school, p.work, p.place].some(v => v && v.toLowerCase().includes(q))).slice(0, 12);
+  const hits = PEOPLE.filter(p => [p.name, p.nickname, p.livedIn, p.knownFor].some(v => v && v.toLowerCase().includes(q))).slice(0, 12);
   box.innerHTML = hits.length
     ? hits.map(p => `<button data-result="${p.id}">${avatar(p.id)}<span>${nameHTML(p.id)}<small>${esc(relLine(p.id))}</small></span></button>`).join("")
     : `<div class="empty-note" style="padding:10px 12px">No one found</div>`;
