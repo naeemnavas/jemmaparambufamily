@@ -105,7 +105,7 @@ const PEOPLE = [
 
   // ── J H Navas's family ──
   { id: "zebah", name: "Zebah", parent: "navas", spouse: "hans" },
-  { id: "naeem", name: "Naeem", parent: "navas", me: true },
+  { id: "naeem", name: "Naeem", parent: "navas" },
   { id: "hyder", name: "Hyder", parent: "navas" },
   { id: "hans", name: "Hans", marriedIn: true },
   { id: "irik", name: "Irik", parent: "zebah" },
