@@ -503,7 +503,6 @@ function openPerson(id) {
     <div class="head">
       ${avatar(id, "lg")}
       <h2>${displayName(p) ? esc(displayName(p)) : '<span class="name-unknown">Name to be added</span>'}</h2>
-      ${p.nickname && p.name ? `<div class="nick">“${esc(p.nickname)}”</div>` : ""}
       <div class="gen-badge">${p.marriedIn ? "Married into the family" : genLabel(id)}</div>
     </div>
     <h4>About</h4>
