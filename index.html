@@ -320,6 +320,7 @@ function avatar(id, cls = "") {
 }
 const relLine = id => {
   const p = byId[id];
+  if (p.marriedIn && partnerOf[id] === ROOT) return genLabel(ROOT);
   if (p.marriedIn && partnerOf[id]) return `Married to ${displayName(byId[partnerOf[id]])}`;
   if (p.parent) return `Child of ${displayName(byId[p.parent]) || "—"}`;
   return genLabel(id);
@@ -512,7 +513,7 @@ function openPerson(id) {
     ${facts.length ? `<dl class="facts">${facts.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")}</dl>` : ""}
     ${p.memory ? `<h4>Remembered for</h4><p class="about">${esc(p.memory)}</p>` : ""}
     ${!facts.length && !p.memory ? `<div class="empty-note">No details added yet.</div>` : ""}
-    ${chipList(p.marriedIn ? "Spouse" : "Husband / Wife", sp ? [sp] : [])}
+    ${chipList(p.marriedIn && partnerOf[id] !== ROOT ? "Spouse" : "Husband / Wife", sp ? [sp] : [])}
     ${p.marriedIn ? "" : chipList("Parents", parentsOf(id)) + chipList("Brothers &amp; sisters", siblingsOf(id))}
     ${chipList("Children", childrenOf(id))}
     <div class="actions">
