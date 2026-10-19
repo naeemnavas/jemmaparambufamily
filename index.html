@@ -474,9 +474,10 @@ function renderGenerations() {
 /* ───────── PEOPLE VIEW ───────── */
 let peopleFilter = "all";
 function renderPeople() {
-  let list = [...PEOPLE];
-  if (peopleFilter === "family") list = list.filter(p => !p.marriedIn || partnerOf[p.id] === ROOT);
-  if (peopleFilter === "married") list = list.filter(p => p.marriedIn && partnerOf[p.id] !== ROOT);
+  // the founding couple are the root of the tree, so they sit outside these lists
+  let list = PEOPLE.filter(p => p.id !== ROOT && partnerOf[p.id] !== ROOT);
+  if (peopleFilter === "family") list = list.filter(p => !p.marriedIn);
+  if (peopleFilter === "married") list = list.filter(p => p.marriedIn);
   list.sort((a, b) => !displayName(a) - !displayName(b) || displayName(a).localeCompare(displayName(b)));
   const btn = (k, t) => `<button class="pill" data-filter="${k}" style="${peopleFilter === k ? "border-color:var(--accent);color:var(--accent)" : ""}">${t}</button>`;
   return `
