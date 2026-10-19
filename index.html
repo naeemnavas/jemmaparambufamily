@@ -92,6 +92,9 @@
   .node.me { background: var(--accent-soft); }
   .node.hit { background: var(--hit); }
   .toggle { position: absolute; bottom: -11px; left: 50%; transform: translateX(-50%); width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--line); background: var(--paper); cursor: pointer; font-size: 13px; line-height: 1; padding: 0; z-index: 2; }
+  .founders { display: flex; align-items: center; gap: 24px; position: relative; }
+  .founders::before { content: ""; position: absolute; left: 50%; top: 50%; width: 24px; transform: translateX(-50%); border-top: 1.5px solid var(--line); }
+  .founders > .toggle { bottom: -11px; }
   .toggle .ct { font-size: 10px; }
 
   /* ── BRANCH VIEW ── */
@@ -377,6 +380,13 @@ function treeNode(id) {
   const p = byId[id], sp = spouseOf(id), ch = childrenOf(id), d = depth(id);
   const closed = state.collapsed.has(id);
   const cls = ["node", p.me ? "me" : "", state.highlight === id ? "hit" : ""].join(" ");
+  const toggle = ch.length ? `<button class="toggle" data-toggle="${id}" title="${closed ? "Show" : "Hide"} children">${closed ? `<span class="ct">${ch.length}</span>` : "−"}</button>` : "";
+  const kidsUl = ch.length && !closed ? `<ul>${ch.map(treeNode).join("")}</ul>` : "";
+  // the founding couple get a card each, side by side
+  if (id === ROOT && sp) {
+    const card = pid => `<div class="node ${state.highlight === pid ? "hit" : ""}" style="--gc:${genColor(d)}" data-id="${pid}"><div class="who link" data-open="${pid}">${avatar(pid)}${nameHTML(pid)}</div></div>`;
+    return `<li><div class="founders">${card(id)}${card(sp)}${toggle}</div>${kidsUl}</li>`;
+  }
   return `<li>
     <div class="${cls}" style="--gc:${genColor(d)}" data-id="${id}">
       <div class="who link" data-open="${id}">${avatar(id)}${nameHTML(id)}</div>
