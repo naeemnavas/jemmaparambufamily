@@ -489,9 +489,9 @@ function renderPeople() {
 }
 
 /* ───────── PROFILE PANEL ───────── */
-function chipList(ids) {
-  if (!ids.length) return `<div class="empty-note">None recorded</div>`;
-  return `<div class="rel">${ids.map(id => `<div class="chip" data-open="${id}">${avatar(id)}<div>${nameHTML(id)}</div></div>`).join("")}</div>`;
+function chipList(title, ids) {
+  if (!ids.length) return "";
+  return `<h4>${title}</h4><div class="rel">${ids.map(id => `<div class="chip" data-open="${id}">${avatar(id)}<div>${nameHTML(id)}</div></div>`).join("")}</div>`;
 }
 function openPerson(id) {
   const p = byId[id];
@@ -509,9 +509,9 @@ function openPerson(id) {
     ${facts.length ? `<dl class="facts">${facts.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")}</dl>` : ""}
     ${p.memory ? `<h4>Remembered for</h4><p class="about">${esc(p.memory)}</p>` : ""}
     ${!facts.length && !p.memory ? `<div class="empty-note">No details added yet.</div>` : ""}
-    <h4>${p.marriedIn ? "Spouse" : "Husband / Wife"}</h4>${chipList(sp ? [sp] : [])}
-    ${p.marriedIn ? "" : `<h4>Parents</h4>${chipList(parentsOf(id))}<h4>Brothers &amp; sisters</h4>${chipList(siblingsOf(id))}`}
-    <h4>Children</h4>${chipList(childrenOf(id))}
+    ${chipList(p.marriedIn ? "Spouse" : "Husband / Wife", sp ? [sp] : [])}
+    ${p.marriedIn ? "" : chipList("Parents", parentsOf(id)) + chipList("Brothers &amp; sisters", siblingsOf(id))}
+    ${chipList("Children", childrenOf(id))}
     <div class="actions">
       <button class="pill" data-focus="${p.marriedIn ? partnerOf[id] || id : id}">Open their family</button>
       <button class="pill" data-show="${p.marriedIn ? partnerOf[id] || id : id}">Show in tree</button>
