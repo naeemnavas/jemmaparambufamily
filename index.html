@@ -475,8 +475,8 @@ function renderGenerations() {
 let peopleFilter = "all";
 function renderPeople() {
   let list = [...PEOPLE];
-  if (peopleFilter === "family") list = list.filter(p => !p.marriedIn);
-  if (peopleFilter === "married") list = list.filter(p => p.marriedIn);
+  if (peopleFilter === "family") list = list.filter(p => !p.marriedIn || partnerOf[p.id] === ROOT);
+  if (peopleFilter === "married") list = list.filter(p => p.marriedIn && partnerOf[p.id] !== ROOT);
   list.sort((a, b) => !displayName(a) - !displayName(b) || displayName(a).localeCompare(displayName(b)));
   const btn = (k, t) => `<button class="pill" data-filter="${k}" style="${peopleFilter === k ? "border-color:var(--accent);color:var(--accent)" : ""}">${t}</button>`;
   return `
