@@ -340,7 +340,7 @@ function renderFamily() {
   const crumbs = chain.length
     ? `<div class="crumbs">${chain.map(c => `<button data-focus="${c}">${esc(displayName(byId[c]) || "?")}</button><span>›</span>`).join("")}<span>${esc(displayName(p) || "…")}</span></div>` : "";
   const parents = parentsOf(id);
-  const one = pid => `<div class="one" data-open="${pid}">${avatar(pid)}<div>${nameHTML(pid)}</div><small>${byId[pid].marriedIn ? "Married in" : genLabel(pid)}</small></div>`;
+  const one = pid => `<div class="one" data-open="${pid}">${avatar(pid)}<div>${nameHTML(pid)}</div><small>${byId[pid].marriedIn && partnerOf[pid] !== ROOT ? "Married in" : genLabel(byId[pid].marriedIn ? ROOT : pid)}</small></div>`;
   const kidsList = childrenOf(id);
   const sibs = siblingsOf(id);
   return `<div class="fam">
