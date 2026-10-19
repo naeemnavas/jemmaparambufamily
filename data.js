@@ -112,7 +112,7 @@ const PEOPLE = [
 
   // ── J H Navas's family ──
   { id: "zebah", name: "Zebah Navas", parent: "navas", spouse: "hans", born: "1995" },
-  { id: "naeem", name: "Mohamed Naeem Navas", parent: "navas", born: "2000", me: true },
+  { id: "naeem", name: "Mohamed Naeem Navas", parent: "navas", born: "2000" },
   { id: "hyder", name: "Mohamed Hyder Navas", parent: "navas", born: "2006" },
   { id: "hans", name: "Hans M H", marriedIn: true, born: "1988" },
   { id: "irik", name: "Irik Wiem Zehn", parent: "zebah", born: "2024" },
