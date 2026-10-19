@@ -457,13 +457,15 @@ function renderGenerations() {
   const levels = {};
   familyMembers().forEach(p => (levels[depth(p.id)] ||= []).push(p.id));
   return Object.keys(levels).sort((a, b) => a - b).map(d => {
-    const ids = levels[d];
-    const label = +d === depth(ROOT) ? "Generation 1" : genLabel(ids[0]);
+    const first = +d === depth(ROOT);
+    // the founding couple are shown side by side, not as "& spouse"
+    const ids = first ? levels[d].flatMap(id => spouseOf(id) ? [id, spouseOf(id)] : [id]) : levels[d];
+    const label = first ? "Generation 1" : genLabel(ids[0]);
     return `<section class="gen" style="--gc:${genColor(+d)}">
       <h3>${label}<span>${ids.length} ${ids.length === 1 ? "person" : "people"}</span></h3>
       <div class="chips">${ids.map(id => {
-        const sp = spouseOf(id);
-        return `<div class="chip ${byId[id].me ? "me" : ""}" data-open="${id}">${avatar(id)}<div>${nameHTML(id)}${sp ? `<small>&amp; ${esc(displayName(byId[sp]))}</small>` : `<small>${esc(relLine(id))}</small>`}</div></div>`;
+        const sp = first ? null : spouseOf(id);
+        return `<div class="chip ${byId[id].me ? "me" : ""}" data-open="${id}">${avatar(id)}<div>${nameHTML(id)}${sp ? `<small>&amp; ${esc(displayName(byId[sp]))}</small>` : (first ? "" : `<small>${esc(relLine(id))}</small>`)}</div></div>`;
       }).join("")}</div>
     </section>`;
   }).join("");
