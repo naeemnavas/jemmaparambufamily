@@ -1,4 +1,4 @@
-# Jemma Parambu Family
+# Jemma Parambil Family
 
 Family tree of J A Hamza and Fatima Beevi and their descendants.
 
