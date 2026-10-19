@@ -557,7 +557,14 @@ document.addEventListener("click", e => {
   if (!t) { if (!e.target.closest(".searchbox")) document.getElementById("results").classList.add("hidden"); return; }
   if (t.dataset.view) { state.view = t.dataset.view; state.highlight = null; render(); }
   else if (t.dataset.open) { if (t.tagName === "SUMMARY" || t.closest("summary")) e.preventDefault(); openPerson(t.dataset.open); }
-  else if (t.dataset.toggle) { const id = t.dataset.toggle; state.collapsed.has(id) ? state.collapsed.delete(id) : state.collapsed.add(id); render(); }
+  else if (t.dataset.toggle) {
+    // keep the clicked button where it was on screen instead of jumping back to the top
+    const id = t.dataset.toggle, before = t.getBoundingClientRect();
+    state.collapsed.has(id) ? state.collapsed.delete(id) : state.collapsed.add(id);
+    render();
+    const c = document.getElementById("canvas"), btn = c && c.querySelector(`[data-toggle="${id}"]`);
+    if (btn) { const after = btn.getBoundingClientRect(); c.scrollLeft += after.left - before.left; c.scrollTop += after.top - before.top; }
+  }
   else if (t.dataset.act) {
     const a = t.dataset.act;
     if (a === "expand") state.collapsed.clear();
